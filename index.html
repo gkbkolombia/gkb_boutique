@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GKB BOUTIQUE EN LIGNE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 25px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            border-bottom: 5px solid #e67e22;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+            letter-spacing: 1.5px;
+        }
+
+        header .fas.fa-store {
+            font-size: 1.2em;
+            color: #FFD700;
+        }
+
+        section h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+            font-size: 2em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        section {
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #search-input {
+            width: 80%;
+            max-width: 400px;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #search-input:focus {
+            border-color: #2c3e50;
+        }
+
+        .menu {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 110px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background 0.2s;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #388e3c;
+        }
+
+        .btn.active {
+            background-color: #e67e22;
+            transform: scale(1.05);
+        }
+
+        .btn i {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .btn-green { background: #4CAF50; }
+        .btn-blue { background: #2196F3; }
+        .btn-orange { background: #FF9800; }
+
+        #product-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+
+        .product-card h3 {
+            margin: 10px 0;
+            color: #333;
+            font-size: 1.3em;
+        }
+
+        .product-card .price {
+            font-size: 1.4em;
+            color: #e67e22;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .product-card p {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .click-info {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        /* Styles pour la page de détails */
+        .details-container {
+            display: none; /* Cache par défaut */
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .details-container.visible {
+            display: flex; /* Affiche quand la classe 'visible' est ajoutée */
+        }
+
+        .product-image {
+            flex: 1 1 350px;
+            text-align: center;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-info {
+            flex: 1 1 350px;
+        }
+
+        .product-info h1 {
+            font-size: 2.5em;
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .product-info .price {
+            font-size: 1.8em;
+            color: #e67e22;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .product-info p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-btn {
+            display: block;
+            background-color: #25D366;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background-color 0.2s, transform 0.2s;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+        }
+
+        .whatsapp-btn i {
+            font-size: 1.2em;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .back-btn:hover {
+            color: #e67e22;
+        }
+
+        @media (max-width: 768px) {
+            .details-container {
+                flex-direction: column;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-store"></i> GKB BOUTIQUE EN LIGNE</h1>
+    </header>
+
+    <section id="main-content">
+        <h1>Découvrez nos produits</h1>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Rechercher un produit...">
+        </div>
+
+        <div class="menu">
+            <a href="#" class="btn btn-green" data-category="electronics">
+                <i class="fas fa-mobile-alt"></i><br>Électronique
+            </a>
+            <a href="#" class="btn btn-blue" data-category="clothing">
+                <i class="fas fa-tshirt"></i><br>Vêtements
+            </a>
+            <a href="#" class="btn btn-orange" data-category="books">
+                <i class="fas fa-book"></i><br>Livres
+            </a>
+        </div>
+
+        <div id="product-display">
+            </div>
+    </section>
+
+    <section id="product-details" class="details-container">
+        <div class="product-image">
+            <img id="details-img" src="" alt="Produit">
+        </div>
+        <div class="product-info">
+            <h1 id="details-name"></h1>
+            <p id="details-price" class="price"></p>
+            <p id="details-features"></p>
+            <p id="details-description"></p>
+            <a id="details-whatsapp-link" href="#" class="whatsapp-btn" target="_blank">
+                <i class="fab fa-whatsapp"></i> Contacter sur WhatsApp
+            </a>
+            <a href="#" class="back-btn" onclick="showMainPage()">
+                <i class="fas fa-arrow-left"></i> Retour à la boutique
+            </a>
+        </div>
+    </section>
+
+    <script>
+        const products = {
+            electronics: [
+                { id: '1', name: 'Tecno Pova 7', price: '109 000 F CFA', features: 'Écran FHD+ 120Hz, Batterie 7000 mAh, Charge 45W', image: 'images/Tecno Pova 6 Pro.jpg', details: 'Le Tecno Pova 7 est le smartphone idéal pour les gamers et les utilisateurs intensifs. Avec sa batterie de 7000 mAh, il offre une autonomie exceptionnelle. Son écran 120Hz garantit une fluidité parfaite pour toutes vos applications.' },
+                { id: '2', name: 'Tecno Spark Go', price: '85 000 F CFA', features: 'Écran 6.6" 90Hz, Caméra 13MP, Batterie 5000 mAh', image: 'images/Tecno Spark Go 2024.jpg', details: 'Un smartphone économique mais performant. Le Tecno Spark Go 2024 dispose d\'un grand écran fluide et d\'une batterie durable pour une utilisation quotidienne sans compromis.' },
+                { id: '3', name: 'Tecno Spark', price: '60 000 F CFA', features: 'Écran 120Hz, IP64, Appareil photo 50MP, Batterie 5200mAh', image: 'images/Tecno Spark.jpg', details: 'Profitez d\'une expérience visuelle immersive avec l\'écran 120Hz du Tecno Spark. Sa certification IP64 le protège contre la poussière et les éclaboussures, et son appareil photo de 50 MP capture des moments clairs et nets.' },
+                { id: '4', name: 'Tecno Pova 7 Pro', price: '110 000 F CFA', features: 'Écran AMOLED 1.5K 144Hz, Batterie 6000mAh, Charge 45W', image: 'images/Tecno Camon 30 Pro.jpg', details: 'Le Pova 7 Pro est une bête de puissance. Son écran AMOLED 144Hz offre des couleurs vibrantes et une réactivité sans précédent. Idéal pour les jeux et le multimédia.' },
+                { id: '5', name: 'Tecno Spark 40 Pro+', price: '130 000 F CFA', features: 'Appareil photo principal de 50 MP, Autofocus, Pas de stabilisation optique', image: 'images/Tecno Spark 40 Pro+.jpg', details: 'Un appareil photo haute résolution pour des clichés détaillés. Le Spark 40 Pro+ excelle dans la photographie et offre une expérience utilisateur fluide.' },
+                { id: '6', name: 'Tecno Spark 40 Pro', price: '85 000 F CFA', features: 'Écran AMOLED 144Hz, Appareil photo 50MP, Batterie 5200mAh', image: 'images/Tecno Spark 40 Pro.jpg', details: 'Combinant un écran ultra-fluide et une grande batterie, le Spark 40 Pro est un excellent choix pour ceux qui recherchent performance et autonomie.' },
+                { id: '7', name: 'Tecno Spark 40', price: '75 000 F CFA', features: 'Android 15, 128Go de stockage, Appareil photo 50MP', image: 'images/Tecno Spark 40.jpg', details: 'Avec la dernière version d\'Android et un appareil photo performant, le Tecno Spark 40 est un smartphone moderne et polyvalent pour un usage quotidien.' },
+                { id: '8', name: 'Tecno Pova 7 Ultra', price: '95 000 F CFA', features: 'Écran AMOLED 144Hz, Caméra 108MP, Batterie 6000mAh', image: 'images/Tecno Pova 7 Ultra.jpg', details: 'Le Pova 7 Ultra est conçu pour la performance. Sa caméra de 108 MP prend des photos d\'une clarté impressionnante, et son écran 144Hz offre une expérience de navigation incroyablement fluide.' },
+                { id: '9', name: 'Tecno Spark Go 2', price: '75 000 F CFA', features: 'Écran 6" 720p, Android 8.1, Batterie 3500mAh', image: 'images/Tecno Spark Go 2.jpg', details: 'Compact et efficace, le Spark Go 2 est idéal pour une utilisation basique et fiable.' },
+                { id: '10', name: 'Tecno Pova 7 4G', price: '145 000 F CFA', features: 'Appareil photo 108 MP, Batterie 7000mAh, Charge rapide 45W', image: 'images/Tecno Pova 7 4G.jpg', details: 'Le Pova 7 4G combine un appareil photo de 108 MP pour des images exceptionnelles et une batterie massive pour une utilisation prolongée.' },
+                { id: '11', name: 'Tecno Pova Curve', price: '159 000 F CFA', features: 'Écran AMOLED incurvé 144Hz, Caméra 64MP, Batterie 5500mAh', image: 'images/Tecno Pova Curve.jpg', details: 'Un design futuriste avec son écran incurvé. Le Pova Curve offre une expérience visuelle unique et une caméra de haute qualité.' },
+                { id: '12', name: 'Tecno Camon 40', price: '120 000 F CFA', features: 'Écran AMOLED 120Hz, Appareil photo 50MP, Batterie 5200mAh', image: 'images/Tecno Camon 40.jpg', details: 'Le Camon 40 est conçu pour les amateurs de photo. Son appareil photo 50 MP et son écran AMOLED 120Hz en font un choix premium pour la capture de moments mémorables.' },
+                { id: '13', name: 'Tecno Camon 40 Pro 4G', price: '135 000 F CFA', features: 'Écran AMOLED 120Hz, Résistance IP68, Caméra 50MP', image: 'images/Tecno Camon 40 Pro 4G.jpg', details: 'Un smartphone robuste et performant. Le Camon 40 Pro 4G est résistant à l\'eau et à la poussière, idéal pour toutes les aventures.' },
+                { id: '14', name: 'Tecno Camon 40 Pro', price: '145 000 F CFA', features: 'Processeur MediaTek Helio G99, Appareil photo 50MP avec OIS', image: 'images/Tecno Camon 40 Pro.jpg', details: 'Le Camon 40 Pro est un téléphone puissant avec un processeur rapide et une caméra stabilisée par OIS, garantissant des photos et vidéos stables et de haute qualité.' },
+                { id: '15', name: 'Tecno Camon 40 Premier', price: '290 000 F CFA', features: 'Processeur MediaTek Dimensity 8350, Caméra Sony 50MP, IP68/IP69', image: 'images/Tecno Camon 40 Premier.jpg', details: 'Le fleuron de la série Camon. Le 40 Premier offre des performances de pointe, une caméra Sony de 50 MP et une résistance exceptionnelle à l\'eau et à la poussière.' },
+                { id: '16', name: 'Tecno Spark Go 1S', price: '105 000 F CFA', features: 'Écran 6.67" IPS 120Hz, Batterie 5000mAh, Charge 15W', image: 'images/Tecno Spark Go 1S.jpg', details: 'Un téléphone polyvalent avec un grand écran et une batterie qui tient toute la journée. Idéal pour le divertissement et la communication.' },
+                { id: '17', name: 'Tecno Megapad 11', price: '110 000 F CFA', features: 'Tablette 11" 90Hz, Batterie 8000mAh, Processeur Helio G99', image: 'images/Tecno Megapad 11.jpg', details: 'La tablette Megapad 11 est parfaite pour le travail et les loisirs. Son grand écran, sa batterie puissante et son processeur efficace en font un outil indispensable.' },
+                { id: '18', name: 'Tecno Pop 9 4G', price: '45 000 F CFA', features: 'Écran 6.67", Caméra 13MP, Batterie 5000 mAh', image: 'images/Tecno Pop 9 4G.jpg', details: 'Un téléphone d\'entrée de gamme fiable. Le Tecno Pop 9 4G offre toutes les fonctionnalités essentielles pour une utilisation quotidienne à un prix très abordable.' },
+                { id: '19', name: 'Tecno Camon 30S', price: '99 000 F CFA', features: 'Écran AMOLED 120Hz, Caméra 50MP avec OIS, Batterie 5000 mAh', image: 'images/Tecno Camon 30S.jpg', details: 'Le Camon 30S est un excellent compromis entre performance et photographie, avec un écran fluide et une caméra stabilisée.' },
+                { id: '20', name: 'Tecno Spark 30C 5G', price: '85 000 F CFA', features: 'Écran 6.67" 120Hz, IP54, Batterie 5000 mAh, 5G', image: 'images/Tecno Spark 30C 5G.jpg', details: 'Un smartphone 5G abordable avec un écran fluide et une bonne autonomie. Idéal pour la connectivité rapide.' },
+                { id: '21', name: 'Apple iPhone 12 Pro Max', price: '245 000 F CFA', features: 'Écran OLED Super Retina XDR, Puce A14 Bionic, 5G', image: 'images/Apple iPhone 12 Pro Max.jpg', details: 'L\'iPhone 12 Pro Max offre des performances haut de gamme, une qualité de construction exceptionnelle et le meilleur de l\'écosystème Apple.' },
+                { id: '22', name: 'Apple iPhone 12 Pro', price: '850 000 F CFA', features: 'Écran OLED, Puce A14 Bionic, 5G', image: 'images/Apple iPhone 12 Pro.jpg', details: 'Compact et puissant, l\'iPhone 12 Pro est un appareil polyvalent avec un excellent appareil photo et des performances fluides.' },
+                { id: '23', name: 'Sumsung Galaxy A72', price: '228 000 F CFA', features: 'Écran Super AMOLED 90Hz, Appareil photo 64MP avec OIS', image: 'images/Sumsung Galaxy A72.jpg', details: 'Le Galaxy A72 est un téléphone milieu de gamme avec un écran magnifique et un appareil photo de haute qualité, parfait pour la photographie au quotidien.' },
+                { id: '24', name: 'Sumsung Galaxy A12 Nacho', price: '92 000 F CFA', features: 'Écran HD+ 60Hz, Batterie 5000mAh', image: 'images/Sumsung Galaxy A12 Nacho.jpg', details: 'Le Galaxy A12 Nacho est un smartphone fiable pour un usage basique, avec une grande batterie pour une longue autonomie.' },
+                { id: '25', name: 'Xiaomi Pad 5', price: '65 000 F CFA', features: 'Tablette 11" IPS 120Hz, Processeur Snapdragon 860', image: 'images/Xiaomi Pad 5.jpg', details: 'La Xiaomi Pad 5 est une tablette puissante pour le divertissement, avec un grand écran fluide et des performances rapides pour les jeux et les vidéos.' },
+                { id: '26', name: 'Xiaomi Pad 5 Pro', price: '145 000 F CFA', features: 'Tablette 11" 120Hz, Processeur Snapdragon 870', image: 'images/Xiaomi Pad 5 Pro.jpg', details: 'La version Pro de la Xiaomi Pad 5 offre encore plus de puissance, idéale pour la productivité et les tâches exigeantes.' },
+                { id: '27', name: 'Xiaomi Mix 4', price: '60 000 F CFA', features: 'Écran AMOLED 120Hz, Caméra principale 108MP', image: 'images/Xiaomi Mix 4.jpg', details: 'Un smartphone au design futuriste avec une caméra sous l\'écran et un appareil photo principal de 108 MP pour des photos incroyables.' },
+                { id: '28', name: 'Sumsung Galaxy Z Flip3 5G', price: '135 000 F CFA', features: 'Écran pliable, 5G, Résistance à l\'eau IPX8', image: 'images/Sumsung Galaxy Z Flip3 5G.jpg', details: 'Le Galaxy Z Flip3 est un téléphone élégant et compact qui se plie en deux, parfait pour ceux qui recherchent un appareil unique et stylé.' },
+                { id: '29', name: 'Sumsung Galaxy Z Fold3 5G', price: '265 000 F CFA', features: 'Écran principal pliable, Prise en charge du S Pen, 5G', image: 'images/Sumsung Galaxy Z Fold3 5G.jpg', details: 'Le Galaxy Z Fold3 est un hybride entre smartphone et tablette, offrant un grand écran pliable et une productivité maximale avec le support du S Pen.' }
+            ],
+            clothing: [
+                { id: '30', name: 'Sac à dos gris', price: '14 000 F CFA', features: 'Imperméable, Compartiment pour ordinateur portable', image: 'images/IMG-20250809-WA0055.jpg', details: 'Ce sac à dos gris est parfait pour le quotidien ou les voyages. Son tissu imperméable protège vos affaires, et il dispose de plusieurs compartiments pratiques, dont un pour un ordinateur portable.' },
+                { id: '31', name: 'Chaussures de sport', price: '17 000 F CFA', features: 'Confortables, Respirantes, Style urbain', image: 'images/IMG-20250817-WA0038.jpg', details: 'Ces chaussures de sport allient confort et style. Leur conception respirante est idéale pour les longues marches ou les activités sportives légères. Leur design urbain les rend faciles à assortir avec toutes vos tenues.' },
+                { id: '32', name: 'Chaussures de sport tendance', price: '21 000 F CFA', features: 'Design moderne, Semelle antidérapante', image: 'images/IMG-20250817-WA0014.jpg', details: 'Avec leur design tendance, ces chaussures de sport vous garantissent un look moderne. La semelle antidérapante offre une excellente adhérence sur toutes les surfaces, pour un confort et une sécurité optimaux.' },
+                { id: '33', name: 'Pull à col roulé', price: '12 000 F CFA', features: 'Tricoté, Col haut, Tissu chaud', image: 'images/IMG-20250813-WA0005.jpg', details: 'Ce pull à col roulé est parfait pour les journées froides. Son tissu tricoté est doux et chaud, et le col haut offre une protection supplémentaire contre le vent.' },
+                { id: '34', name: 'Tissu Wax Satin Gold', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0013.jpg', details: 'Ce tissu Wax Satin Gold est idéal pour confectionner des tenues élégantes et colorées. La qualité de l\'imprimé et les couleurs vives ne s\'estompent pas au lavage.' },
+                { id: '35', name: 'Polo jaune', price: '7 500 F CFA', features: '100% coton, Léger, Coupe classique', image: 'images/IMG-20250807-WA0005.jpg', details: 'Un polo classique et confortable en 100% coton. Sa couleur jaune vive apportera une touche de gaieté à votre garde-robe. Parfait pour un look décontracté.' },
+                { id: '36', name: 'Sac à dos beige', price: '16 000 F CFA', features: 'Résistant à l\'eau, USB, Grande capacité', image: 'images/IMG-20250817-WA0026.jpg', details: 'Ce sac à dos beige est à la fois élégant et fonctionnel. Il est résistant à l\'eau et dispose d\'un port USB intégré pour charger vos appareils en déplacement. Sa grande capacité en fait un excellent choix pour les étudiants et les voyageurs.' },
+                { id: '37', name: 'Chaussures montantes', price: '24 000 F CFA', features: 'Design unique, Semelle durable', image: 'images/IMG-20250807-WA0003.details' },
+                { id: '38', name: 'Tissu Wax Satin Gold', price: '15 000 F CFA', features: 'Motifs floraux, Haute qualité', image: 'images/IMG-20250818-WA0012.jpg', details: 'Un tissu Wax de haute qualité avec de magnifiques motifs floraux. Parfait pour les occasions spéciales ou pour ajouter une touche de couleur à votre quotidien.' },
+                { id: '39', name: 'Ensemble de bijoux et montre', price: '19 000 F CFA', features: 'Montre en or, Chaîne et bracelet assortis', image: 'images/IMG-20250813-WA0061.jpg', details: 'Un ensemble élégant qui inclut une montre, une chaîne et un bracelet assortis. Idéal pour un cadeau ou pour ajouter une touche de sophistication à votre look.' },
+                { id: '40', name: 'Chaussures de ville marron', price: '44 000 F CFA', features: 'Cuir véritable, Finition brillante, Lacets fins', image: 'images/IMG-20250822-WA0008.jpg', details: 'Ces chaussures de ville en cuir véritable sont un classique intemporel. Leur finition brillante et leurs lacets fins les rendent parfaites pour les occasions formelles.' },
+                { id: '41', name: 'Sandales en cuir marron', price: '9 500 F CFA', features: 'Bride tressée, Confortables, Décontractées', image: 'images/IMG-20250822-WA0013.jpg', details: 'Des sandales en cuir confortables et décontractées. Idéales pour l\'été, elles s\'accorderont facilement avec un short ou un jean.' },
+                { id: '42', name: 'Sandales en cuir blanc', price: '9 500 F CFA', features: 'Design minimaliste, Idéales pour l\'été', image: 'images/IMG-20250822-WA0014.jpg', details: 'Ces sandales en cuir blanc ont un design minimaliste et épuré. Elles sont parfaites pour une journée ensoleillée et ajoutent une touche de fraîcheur à votre style.' },
+                { id: '43', name: 'Mocassins noirs', price: '29 000 F CFA', features: 'Cuir souple, Confort maximal', image: 'images/IMG-20250822-WA0016.jpg', details: 'Ces mocassins noirs en cuir souple offrent un confort maximal. Ils sont à la fois élégants et décontractés, parfaits pour toutes les occasions.' },
+                { id: '44', name: 'Sandales en cuir noir', price: '9 500 F CFA', features: 'Bride tressée, Style élégant', image: 'images/IMG-20250822-WA0011.jpg', details: 'Des sandales noires élégantes avec une bride tressée. Elles sont idéales pour compléter une tenue chic et décontractée.' },
+                { id: '45', name: 'Mocassins en cuir marron', price: '34 000 F CFA', features: 'Cuir texturé, Finition haut de gamme', image: 'images/IMG-20250822-WA0012.jpg', details: 'Des mocassins en cuir marron de haute qualité. La texture du cuir et la finition haut de gamme leur confèrent un look luxueux et intemporel.' },
+                { id: '46', name: 'Sandales à motifs léopard', price: '11 500 F CFA', features: 'Motif animalier, Semelle plate', image: 'images/IMG-20250822-WA0032.jpg', details: 'Osez un style audacieux avec ces sandales à motifs léopard. Leur semelle plate les rend très confortables pour la marche.' },
+                { id: '47', name: 'Mocassins bicolores', price: '34 000 F CFA', features: 'Cuir de qualité, Bicolore marron/vert', image: 'images/IMG-20250822-WA0010.jpg', details: 'Des mocassins originaux avec leur design bicolore marron et vert. Fabriqués en cuir de qualité, ils sont à la fois confortables et stylés.' },
+                { id: '48', name: 'Mocassins en cuir marron clair', price: '29 000 F CFA', features: 'Cuir souple, Idéaux pour la conduite', image: 'images/IMG-20250822-WA0015.jpg', details: 'Ces mocassins en cuir marron clair sont très souples et parfaits pour la conduite. Un mélange de style et de fonctionnalité.' },
+                { id: '49', name: 'Mocassins noirs élégants', price: '34 000 F CFA', features: 'Cuir texturé, Classiques et modernes', image: 'images/IMG-20250822-WA0009.jpg', details: 'Des mocassins noirs qui allient un look classique et des touches modernes. Le cuir texturé leur donne une finition sophistiquée.' },
+                { id: '50', name: 'Tissu Wax Satin Gold à motifs floraux', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0018.jpg', details: 'Ce tissu est parfait pour des tenues de cérémonie. Les motifs floraux dorés apportent une touche d\'élégance et de luxe.' },
+                { id: '51', name: 'Tissu Wax Satin Gold en coquillages', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0017.jpg', details: 'Un motif original inspiré des coquillages. Ce tissu Wax est idéal pour créer des robes et des ensembles uniques et estivaux.' },
+                { id: '52', name: 'Tissu Wax Satin Gold abstrait', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0016.jpg', details: 'Ce tissu à motifs abstraits est un choix audacieux et moderne. Il est parfait pour une tenue qui se démarque.' },
+                { id: '53', name: 'Tissu Wax Satin Gold à cercles', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0025.jpg', details: 'Le motif de cercles concentriques apporte un style géométrique très tendance. La qualité du satin le rend doux au toucher.' },
+                { id: '54', name: 'Tissu Wax Satin Gold à motifs d\'oiseaux', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0022.jpg', details: 'Ce tissu arbore de jolis motifs d\'oiseaux, parfaits pour une tenue légère et joyeuse.' },
+                { id: '55', name: 'Tissu Wax Satin Gold floral et géométrique', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0023.jpg', details: 'Ce tissu combine des motifs floraux traditionnels avec des formes géométriques modernes, créant un design unique et élégant.' },
+                { id: '56', name: 'Tissu Wax Satin Gold à feuilles', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0021.jpg', details: 'Les motifs de feuilles dorées sur ce tissu Wax créent un effet naturel et sophistiqué. Idéal pour une robe ou une jupe élégante.' },
+                { id: '57', name: 'Tissu Wax Satin Gold bleu et jaune', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0027.jpg', details: 'Les couleurs vives bleu et jaune de ce tissu en font un choix audacieux. Parfait pour attirer l\'attention lors d\'un événement.' },
+                { id: '58', name: 'Tissu Wax Satin Gold à cercles graphiques', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0019.jpg', details: 'Un design moderne et minimaliste. Ce tissu est parfait pour les créations de mode contemporaines.' },
+                { id: '59', name: 'Tissu Wax Satin Gold à tourbillons', price: '15 000 F CFA', features: 'Imprimé de qualité, Couleurs vives', image: 'images/IMG-20250818-WA0020.jpg', details: 'Les motifs en tourbillons de ce tissu créent un mouvement et un dynamisme uniques. Un choix parfait pour une tenue qui vous mettra en valeur.' },
+                { id: '60', name: 'Chaussures de sport noires', price: '24 000 F CFA', features: 'Design moderne, Confort optimal', image: 'images/IMG-20250820-WA0104.jpg', details: 'Ces chaussures de sport noires ont un design moderne et minimaliste. Elles sont très confortables et parfaites pour une utilisation quotidienne.' },
+                { id: '61', name: 'Chaussures de sport blanches', price: '24 000 F CFA', features: 'Minimalistes, Légères, Polyvalentes', image: 'images/IMG-20250820-WA0110.jpg', details: 'Ces chaussures de sport blanches sont légères et polyvalentes. Leur design minimaliste s\'accorde avec n\'importe quelle tenue, qu\'elle soit sportive ou décontractée.' },
+                { id: '62', name: 'Chaussures de sport noires et blanches', price: '24 000 F CFA', features: 'Style urbain, Semelle blanche', image: 'images/IMG-20250820-WA0108.jpg', details: 'Un classique du style urbain. Ces chaussures de sport noires et blanches sont à la fois élégantes et confortables pour le quotidien.' },
+                { id: '63', name: 'Chaussures de sport montantes noires', price: '24 000 F CFA', features: 'Haute cheville, Design original', image: 'images/IMG-20250820-WA0111.jpg', details: 'Pour un look plus audacieux, ces chaussures de sport montantes noires sont le choix parfait. Leur design original et leur haute cheville offrent un excellent maintien.' },
+                { id: '64', name: 'Chaussures de ville marron clair', price: '44 000 F CFA', features: 'Cuir texturé, Élégantes, Confortables', image: 'images/IMG-20250822-WA0007.jpg', details: 'Ces chaussures de ville en cuir marron clair sont à la fois élégantes et confortables. Elles sont parfaites pour le bureau ou pour un événement formel.' },
+                { id: '65', name: 'Baskets marron', price: '24 000 F CFA', features: 'Semelle épaisse, Style décontracté', image: 'images/IMG-20250820-WA0112.jpg', details: 'Ces baskets marron avec une semelle épaisse sont parfaites pour un look décontracté et tendance. Elles sont très confortables pour la marche.' },
+                { id: '66', name: 'Baskets bleu marine', price: '24 000 F CFA', features: 'Couleur tendance, Parfaites pour tous les jours', image: 'images/IMG-20250820-WA0105.jpg', details: 'Ces baskets bleu marine sont une option élégante pour le quotidien. Leur couleur tendance s\'accorde avec de nombreuses tenues.' },
+                { id: '67', name: 'Baskets blanches et rouges', price: '24 000 F CFA', features: 'Design sportif, Style classique', image: 'images/IMG-20250820-WA0107.jpg', details: 'Un classique du design sportif. Ces baskets blanches et rouges sont parfaites pour ceux qui aiment un look sportif et intemporel.' },
+                { id: '68', name: 'Chaussures de ville noires', price: '44 000 F CFA', features: 'Finition brillante, Classiques et élégantes', image: 'images/IMG-20250822-WA0005.jpg', details: 'Ces chaussures de ville noires avec une finition brillante sont un must-have pour toutes les occasions formelles. Elles sont classiques et élégantes.' },
+                { id: '69', name: 'Tissu à carreaux bleus', price: '15 000 F CFA', features: 'Tissu de qualité, Idéal pour des tenues élégantes', image: 'images/IMG-20250829-WA0074.jpg', details: 'Ce tissu à carreaux bleus est idéal pour créer des tenues élégantes et professionnelles. Sa qualité est exceptionnelle.' },
+                { id: '70', name: 'Tissu à motifs floraux violets', price: '15 000 F CFA', features: 'Tissu de qualité, Idéal pour des tenues élégantes', image: 'images/IMG-20250829-WA0075.jpg', details: 'Ce tissu à motifs floraux violets est parfait pour une robe d\'été ou une jupe. Les motifs sont vifs et le tissu est de haute qualité.' },
+                { id: '71', name: 'Tissu à carreaux violets et noirs', price: '15 000 F CFA', features: 'Tissu de qualité, Idéal pour des tenues élégantes', image: 'images/IMG-20250829-WA0076.jpg', details: 'Un design moderne et élégant avec des carreaux violets et noirs. Ce tissu est idéal pour une robe de soirée ou un ensemble chic.' },
+                { id: '72', name: 'Tissu à motifs géométriques blancs et marron', price: '15 000 F CFA', features: 'Tissu de qualité, Idéal pour des tenues élégantes', image: 'images/IMG-20250829-WA0077.jpg', details: 'Ce tissu à motifs géométriques blancs et marron est parfait pour créer des tenues uniques et sophistiquées.' }
+            ],
+            books: [
+                { id: '73', name: 'Semaine de Français (3e)', price: '3 000 F CFA', features: 'Livre de cours complet, textes et activités d\'apprentissage.', image: 'images/IMG-20250829-WA0009.jpg', details: 'Ce livre de français pour la 3e est un outil indispensable pour les étudiants. Il contient des textes, des exercices et des activités pour maîtriser la langue française.' },
+                { id: '74', name: 'Semaine de Français (4e)', price: '3 000 F CFA', features: 'Livre de cours complet, textes et activités d\'apprentissage.', image: 'images/IMG-20250829-WA0010.jpg', details: 'Un livre de français complet pour la 4e, avec des leçons claires et des exercices pratiques pour aider les étudiants à progresser.' },
+                { id: '75', name: 'Semaine de Français (5e)', price: '3 000 F CFA', features: 'Livre de cours complet, textes et activités d\'apprentissage.', image: 'images/IMG-20250829-WA0008.jpg', details: 'Idéal pour les élèves de 5e, ce livre de français propose une approche pédagogique efficace avec des textes stimulants et des activités variées.' },
+                { id: '76', name: 'Semaine de Français (6e)', price: '3 000 F CFA', features: 'Livre de cours complet, textes et activités d\'apprentissage.', image: 'images/IMG-20250829-WA0011.jpg', details: 'Ce manuel de français pour la 6e est conçu pour faciliter l\'apprentissage avec des leçons structurées et des exercices adaptés.' },
+                { id: '77', name: 'Cahier de l\'élève (Physique, Chimie & Technologie 4e)', price: '3 000 F CFA', features: 'Cahier de l\'élève conforme au nouveau programme.', image: 'images/IMG-20250829-WA0013.jpg', details: 'Un cahier d\'exercices essentiel pour les élèves de 4e. Il suit le nouveau programme et offre des exercices pratiques pour consolider les acquis.' },
+                { id: '78', name: 'Cahier de l\'élève (Physique, Chimie & Technologie 5e)', price: '3 000 F CFA', features: 'Cahier de l\'élève conforme au nouveau programme.', image: 'images/IMG-20250829-WA0012.jpg', details: 'Ce cahier d\'exercices est un complément parfait pour le cours de Physique, Chimie & Technologie en 5e. Il aide les élèves à s\'entraîner et à se préparer aux examens.' },
+                { id: '79', name: 'Livre de l\'élève (Physique & Chimie 6e)', price: '3 000 F CFA', features: 'Livre de l\'élève conforme aux programmes en vigueur.', image: 'images/IMG-20250820-WA0164.jpg', details: 'Un manuel de référence pour la physique et la chimie en 6e. Il est complet et couvre tous les sujets du programme.' },
+                { id: '80', name: 'Manuel de l\'élève (Artimaths 6e)', price: '3 000 F CFA', features: 'Manuel de l\'élève conforme aux programmes en vigueur.', image: 'images/IMG-20250820-WA0172.jpg', details: 'Ce manuel de mathématiques pour la 6e est clair et facile à suivre. Il est conçu pour aider les élèves à comprendre les concepts mathématiques de base.' },
+                { id: '81', name: 'Cahier d\'exercices rituels (Artimaths 6e)', price: '3 000 F CFA', features: 'Cahier d\'exercices conforme aux programmes APC.', image: 'images/IMG-20250820-WA0175.jpg', details: 'Ce cahier d\'exercices rituels est idéal pour la pratique quotidienne des mathématiques. Il aide les élèves à consolider leurs compétences et à se préparer aux tests.' },
+                { id: '82', name: 'Cahier de l\'élève (Physique, Chimie & Technologie 3e)', price: '3 000 F CFA', features: 'Cahier de l\'élève conforme au nouveau programme.', image: 'images/IMG-20250820-WA0176.jpg', details: 'Ce cahier est un excellent outil pour les élèves de 3e. Il est conforme au nouveau programme et propose des exercices pour la physique, la chimie et la technologie.' }
+            ]
+        };
+
+        const mainContentSection = document.getElementById('main-content');
+        const detailsSection = document.getElementById('product-details');
+        const productDisplay = document.getElementById('product-display');
+        const searchInput = document.getElementById('search-input');
+        const categoryButtons = document.querySelectorAll('.menu .btn');
+
+        function showProductDetails(product) {
+            document.getElementById('details-img').src = product.image;
+            document.getElementById('details-name').textContent = product.name;
+            document.getElementById('details-price').textContent = product.price;
+            document.getElementById('details-features').textContent = product.features;
+            document.getElementById('details-description').textContent = product.details;
+
+            const whatsappNumber = '+22890707573';
+            const message = `Bonjour, je suis intéressé(e) par le produit suivant : ${product.name} (${product.price}).`;
+            const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            document.getElementById('details-whatsapp-link').href = whatsappLink;
+
+            mainContentSection.style.display = 'none';
+            detailsSection.style.display = 'flex';
+        }
+
+        function showMainPage() {
+            detailsSection.style.display = 'none';
+            mainContentSection.style.display = 'block';
+            filterByCategory('all');
+            searchInput.value = '';
+        }
+
+        function renderProducts(productsToDisplay) {
+            productDisplay.innerHTML = '';
+            if (productsToDisplay.length === 0) {
+                productDisplay.innerHTML = '<p style="text-align:center; width: 100%;">Aucun produit ne correspond à votre recherche.</p>';
+                return;
+            }
+
+            productsToDisplay.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.onclick = () => showProductDetails(product);
+
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="price">${product.price}</p>
+                    <p>${product.features}</p>
+                    <p class="click-info">
+                        <i class="fas fa-info-circle"></i> Cliquez pour les détails
+                    </p>
+                `;
+                productDisplay.appendChild(productCard);
+            });
+        }
+
+        function filterByCategory(category) {
+            const productsToDisplay = (category === 'all') ?
+                Object.values(products).flat() :
+                products[category];
+
+            renderProducts(productsToDisplay);
+
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            if (category !== 'all') {
+                document.querySelector(`.btn[data-category="${category}"]`).classList.add('active');
+            }
+        }
+
+        function handleSearch() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const allProducts = Object.values(products).flat();
+            
+            const filteredProducts = allProducts.filter(product => {
+                const searchString = `${product.name} ${product.features} ${product.details}`.toLowerCase();
+                return searchString.includes(searchTerm);
+            });
+            renderProducts(filteredProducts);
+        }
+
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = btn.getAttribute('data-category');
+                filterByCategory(category);
+                searchInput.value = '';
+            });
+        });
+
+        searchInput.addEventListener('keyup', handleSearch);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Laissez cette fonction vide pour que la liste de produits soit vide au démarrage
+        });
+    </script>
+</body>
+</html>
